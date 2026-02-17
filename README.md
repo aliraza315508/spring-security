@@ -1,88 +1,87 @@
-Project Overview
+🔐 Spring Boot JWT Authentication (Spring Security + MySQL)
 
-The system includes multiple backend services that work together to provide currency exchange and conversion functionality.
+This project is a simple authentication system built with Spring Boot 4, Spring Security, JWT, and MySQL.
 
-The architecture follows modern microservice principles:
+It demonstrates how to implement secure user registration and login using token-based authentication instead of session-based security.
 
-Independent services
+The goal of this project was to build a clean, production-style authentication flow using modern Spring Security configuration.
 
-Service discovery
+🚀 Features
 
-API gateway routing
+User registration with encrypted passwords (BCrypt)
 
-Distributed tracing
+Login endpoint that generates a JWT
 
-Containerized deployment
+Stateless authentication using JWT tokens
 
-All services communicate using service names through Eureka rather than hardcoded URLs.
+Role-based authorization (USER / ADMIN)
 
-Services Included
+Custom UserDetailsService backed by MySQL
 
-Naming Server
-Acts as the service registry using Eureka. All services register themselves here.
+Secure Spring Security filter chain configuration
 
-API Gateway
-Serves as the single entry point to the system. It handles routing requests to the correct microservice.
+🛠 Tech Stack
 
-Currency Exchange Service
-Provides exchange rate information between currencies.
+Java 25
 
-Currency Conversion Service
-Uses the exchange service to calculate final conversion amounts.
+Spring Boot 4.0.1
 
-Zipkin Server
-Collects and visualizes distributed tracing data between services.
+Spring Security
 
-Technologies Used
+Spring Data JPA
 
-Java 17
+MySQL
 
-Spring Boot
-
-Spring Cloud (Eureka and Gateway)
+JWT (jjwt library)
 
 Maven
 
-Docker
+🔄 How Authentication Works
 
-Docker Compose
+A user registers using /api/auth/register.
 
-Zipkin
+The password is encrypted using BCrypt and stored in MySQL.
 
-Key Concepts Demonstrated
+The user logs in via /api/auth/login.
 
-This project demonstrates:
+If credentials are valid, the system generates a JWT.
 
-Microservices architecture design
+The client includes the token in future requests:
 
-Inter-service communication
+Authorization: Bearer <JWT_TOKEN>
 
-Service discovery using Eureka
 
-Centralized routing through API Gateway
+A custom JWT filter validates the token and sets authentication in the Spring Security context.
 
-Distributed tracing using Zipkin
+This makes the application completely stateless — no HTTP sessions are used.
 
-Containerized deployment using Docker Compose
+📌 API Endpoints
+Register
 
-It reflects how modern backend systems are structured in production environments.
+POST /api/auth/register
 
-Running the Project
+Login
 
-All services can be started together using Docker Compose from the project root.
-Once started, services automatically register with Eureka and become discoverable.
+POST /api/auth/login
 
-The Eureka dashboard allows you to verify service registration.
-Zipkin dashboard allows you to monitor service-to-service communication.
+After login, the response contains a JWT token that must be used for protected endpoints.
 
-Purpose of This Project
+⚙️ Configuration
 
-This project was created to practice real-world microservice architecture and containerization. It is suitable for:
+Make sure MySQL is running and create a database:
 
-Backend development learning
+CREATE DATABASE user_db;
 
-Portfolio demonstration
 
-Interview preparation
+Update application.properties with your DB credentials and JWT secret.
 
-Cloud deployment practice
+⚠️ The JWT secret must be Base64 encoded.
+
+▶️ Running the Application
+mvn clean install
+mvn spring-boot:run
+
+
+Application runs on:
+
+http://localhost:8080
